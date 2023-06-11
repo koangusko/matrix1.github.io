@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>矩陣乘法</title>
+    <style>
+        input {
+        font-size: 16px; /* 可以調整成你想要的文字大小 */
+        -webkit-text-size-adjust: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        button {
+        font-size: 10px; /* 可以調整成你想要的按鈕文字大小 */
+        padding: 5px 10px; /* 可以調整成你想要的內邊距大小 */
+        }
+    </style>
+    <script>
+        function multiplyMatrices() {
+            var rows = parseInt(document.getElementById("rows").value);
+            var cols = parseInt(document.getElementById("cols").value);
+            var colsMath = parseInt(document.getElementById("colsMath").value);
+            var temp = 0;
+            var math1 = new Array(rows);
+            var math2 = new Array(cols);
+            var ans = new Array(rows);
+
+            for (var i = 0; i < rows; i++) {
+                math1[i] = new Array(cols);
+                for (var j = 0; j < cols; j++) {
+                    math1[i][j] = parseInt(document.getElementById("math1_" + i + "_" + j).value);
+                }
+            }
+
+            for (var i = 0; i < cols; i++) {
+                math2[i] = new Array(colsMath);
+                for (var j = 0; j < colsMath; j++) {
+                    math2[i][j] = parseInt(document.getElementById("math2_" + i + "_" + j).value);
+                }
+            }
+
+            for (var i = 0; i < rows; i++) {
+                ans[i] = new Array(colsMath);
+                for (var j = 0; j < colsMath; j++) {
+                    for (var k = 0; k < cols; k++) {
+                        temp = temp + math1[i][k] * math2[k][j];
+                    }
+                    ans[i][j] = temp;
+                    temp = 0;
+                }
+            }
+
+            var result = "相乘結果為：<br>";
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < colsMath; j++) {
+                    result += ans[i][j] + " ";
+                }
+                result += "<br>";
+            }
+
+            document.getElementById("result").innerHTML = result;
+        }
+    </script>
+</head>
+<body>
+    <h1>矩陣乘法</h1>
+    <label for="rows">輸入行數：</label>
+    <input type="number" id="rows"><br>
+    <label for="cols">輸入列數：</label>
+    <input type="number" id="cols"><br>
+    <label for="colsMath">輸入相乘的矩陣列數：</label>
+    <input type="number" id="colsMath"><br>
+    <button onclick="multiplyMatrices()">執行</button><br>
+    <table id="inputTable1"></table>
+    <table id="inputTable2"></table>
+    <div id="result"></div>
+
+    <script>
+        // Generate input tables for matrix elements
+        var inputTable1 = document.getElementById("inputTable1");
+        var inputTable2 = document.getElementById("inputTable2");
+
+        function generateInputTable(table, rows, cols, idPrefix) {
+            table.innerHTML = "";
+            for (var i = 0; i < rows; i++) {
+                var row = table.insertRow();
+                for (var j = 0; j < cols; j++) {
+                    var cell = row.insertCell();
+                    var input = document.createElement("input");
+                    input.type = "number";
+                    input.id = idPrefix + i + "_" + j;
+                    cell.appendChild(input);
+                }
+            }
+        }
+
+        // Generate input tables when rows and columns are provided
+        document.getElementById("rows").addEventListener("change", function () {
+            var rows = parseInt(this.value);
+            var cols = parseInt(document.getElementById("cols").value);
+            generateInputTable(inputTable1, rows, cols, "math1_");
+        });
+
+        document.getElementById("cols").addEventListener("change", function () {
+            var rows = parseInt(document.getElementById("rows").value);
+            var cols = parseInt(this.value);
+            generateInputTable(inputTable1, rows, cols, "math1_");
+        });
+
+        document.getElementById("colsMath").addEventListener("change", function () {
+            var cols = parseInt(this.value);
+            generateInputTable(inputTable2, parseInt(document.getElementById("cols").value), cols, "math2_");
+        });
+    </script>
+</body>
+</html>
